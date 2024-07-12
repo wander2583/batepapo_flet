@@ -4,10 +4,14 @@ import flet as ft
 def main(pagina):  # TODO: Adicionar a página como argumento
     titulo = ft.Text("Bate Papo ao Vivo.")
 
+    def enviar_mensagem_tunel(mensagem):
+        chat.controls.append(ft.Text(mensagem))
+        pagina.update()
+
+    pagina.pubsub.subscribe("enviar_mensagem", enviar_mensagem_tunel)
+
     titulo_janela = ft.Text("Só Sei que foi assim...")
     campo_nome_usuario = ft.TextField(label="Usuário?")
-
-    texto_mensagem = ft.TextField(label="Digite sua mensagem")
 
     def enviar_mensagem(
         evento,
@@ -15,9 +19,13 @@ def main(pagina):  # TODO: Adicionar a página como argumento
         texto = texto_mensagem.value
         texto = f"{campo_nome_usuario.value}: {texto}"
         chat.controls.append(ft.Text(texto))
+        pagina.pubsub.send_all(texto)
         texto_mensagem.value = ""
         pagina.update()
 
+    texto_mensagem = ft.TextField(
+        label="Digite sua mensagem", on_submit=enviar_mensagem
+    )
     botao_enviar = ft.ElevatedButton("Enviar", on_click=enviar_mensagem)
     chat = ft.Column([])
 
