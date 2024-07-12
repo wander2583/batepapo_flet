@@ -1,20 +1,31 @@
 import flet as ft
 
-# from flet import WEB_BROWSER
 
-
-def main(pagina):
+def main(pagina):  # TODO: Adicionar a página como argumento
     titulo = ft.Text("Bate Papo ao Vivo.")
 
     titulo_janela = ft.Text("Só Sei que foi assim...")
     campo_nome_usuario = ft.TextField(label="Usuário?")
+
     texto_mensagem = ft.TextField(label="Digite sua mensagem")
-    botao_enviar = ft.ElevatedButton("Enviar")
+
+    def enviar_mensagem(
+        evento,
+    ):  # FIX: Verificar como retirar o aviso de variável não utilizada
+        texto = texto_mensagem.value
+        texto = f"{campo_nome_usuario.value}: {texto}"
+        chat.controls.append(ft.Text(texto))
+        texto_mensagem.value = ""
+        pagina.update()
+
+    botao_enviar = ft.ElevatedButton("Enviar", on_click=enviar_mensagem)
     chat = ft.Column([])
 
     linha_mensagem = ft.Row([texto_mensagem, botao_enviar])
 
-    def entrar_no_chat(evento):
+    def entrar_no_chat(
+        evento,
+    ):  # FIX: Verificar como retirar o aviso de variável não utilizada
         pagina.remove(titulo)
         pagina.remove(botao_iniciar)
         janela.open = False
