@@ -8,7 +8,7 @@ def main(pagina):  # TODO: Adicionar a página como argumento
         chat.controls.append(ft.Text(mensagem))
         pagina.update()
 
-    pagina.pubsub.subscribe("enviar_mensagem", enviar_mensagem_tunel)
+    pagina.pubsub.subscribe(enviar_mensagem_tunel)
 
     titulo_janela = ft.Text("Só Sei que foi assim...")
     campo_nome_usuario = ft.TextField(label="Usuário?")
@@ -19,7 +19,6 @@ def main(pagina):  # TODO: Adicionar a página como argumento
         texto = texto_mensagem.value
         texto = f"{campo_nome_usuario.value}: {texto}"
         chat.controls.append(ft.Text(texto))
-        pagina.pubsub.send_all(texto)
         texto_mensagem.value = ""
         pagina.update()
 
@@ -41,7 +40,7 @@ def main(pagina):  # TODO: Adicionar a página como argumento
         pagina.add(linha_mensagem)
 
         texto_entrou_chat = f"{campo_nome_usuario.value} entrou no chat"
-        chat.controls.append(ft.Text(texto_entrou_chat))
+        pagina.pubsub.send_all(texto_entrou_chat)
 
         pagina.update()
 
